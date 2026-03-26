@@ -17,8 +17,10 @@ export interface DaySummary {
 }
 
 export interface BoothData {
+  plan_20: Booth[];
   plan_10: Booth[];
   plan_7: Booth[];
+  summary_20: DaySummary[];
   summary_10: DaySummary[];
   summary_7: DaySummary[];
   unique_locations: string[];

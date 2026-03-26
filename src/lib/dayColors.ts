@@ -9,6 +9,16 @@ export const DAY_COLORS: Record<number, string> = {
   8: '#4d9945',
   9: '#b84dcc',
   10: '#ccaa00',
+  11: '#6633cc',
+  12: '#b82d7e',
+  13: '#2b94e6',
+  14: '#7048d9',
+  15: '#cc5588',
+  16: '#b8a52b',
+  17: '#3066d9',
+  18: '#45994d',
+  19: '#cc4db8',
+  20: '#00aacc',
 };
 
 export function getDayColor(day: number): string {

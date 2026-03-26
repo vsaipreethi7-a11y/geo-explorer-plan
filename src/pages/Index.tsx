@@ -14,8 +14,8 @@ import { exportToExcel, exportToPdf } from '@/lib/exportUtils';
 
 export default function Index() {
   const { data, loading } = useBoothData();
-  const [activeTab, setActiveTab] = useState<'10' | '7' | 'places'>('10');
-  const [lastPlanTab, setLastPlanTab] = useState<'10' | '7'>('10');
+  const [activeTab, setActiveTab] = useState<'20' | '10' | '7' | 'places'>('10');
+  const [lastPlanTab, setLastPlanTab] = useState<'20' | '10' | '7'>('10');
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
   const [locationFilter, setLocationFilter] = useState('');
 
@@ -29,7 +29,7 @@ export default function Index() {
   }
 
   const handleTabChange = (v: string) => {
-    const newTab = v as '10' | '7' | 'places';
+    const newTab = v as '20' | '10' | '7' | 'places';
     if (newTab !== 'places') {
       setLastPlanTab(newTab);
     }
@@ -49,8 +49,15 @@ export default function Index() {
   };
 
   const planType = activeTab === 'places' ? lastPlanTab : activeTab;
-  const booths = planType === '10' ? data.plan_10 : data.plan_7;
-  const summary = planType === '10' ? data.summary_10 : data.summary_7;
+  const booths = 
+    planType === '20' ? data.plan_20 : 
+    planType === '10' ? data.plan_10 : 
+    data.plan_7;
+    
+  const summary = 
+    planType === '20' ? data.summary_20 : 
+    planType === '10' ? data.summary_10 : 
+    data.summary_7;
 
   const handleDownloadDay = (day: number) => {
     exportToPdf(booths, planType, day);
@@ -72,6 +79,7 @@ export default function Index() {
           </div>
           <Tabs value={activeTab} onValueChange={handleTabChange}>
             <TabsList className="bg-muted ring-1 ring-border">
+              <TabsTrigger value="20" className="data-[state=active]:bg-card">20-Day Plan</TabsTrigger>
               <TabsTrigger value="10" className="data-[state=active]:bg-card">10-Day Plan</TabsTrigger>
               <TabsTrigger value="7" className="data-[state=active]:bg-card">7-Day Plan</TabsTrigger>
               <TabsTrigger value="places" className="data-[state=active]:bg-card flex items-center gap-2">
