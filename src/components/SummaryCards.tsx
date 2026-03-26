@@ -1,16 +1,17 @@
 import type { DaySummary } from '@/types/booth';
 import { getDayColor } from '@/lib/dayColors';
 import { Card, CardContent } from '@/components/ui/card';
-import { MapPin, Route, Calendar } from 'lucide-react';
+import { MapPin, Route, Calendar, Download } from 'lucide-react';
 
 interface SummaryCardsProps {
   summary: DaySummary[];
   totalBooths: number;
   selectedDay: number | null;
   onSelectDay: (day: number | null) => void;
+  onDownloadDay?: (day: number) => void;
 }
 
-export default function SummaryCards({ summary, totalBooths, selectedDay, onSelectDay }: SummaryCardsProps) {
+export default function SummaryCards({ summary, totalBooths, selectedDay, onSelectDay, onDownloadDay }: SummaryCardsProps) {
   const totalDistance = summary.reduce((s, d) => s + d.estimated_distance_km, 0);
 
   return (
@@ -63,18 +64,35 @@ export default function SummaryCards({ summary, totalBooths, selectedDay, onSele
           All Days
         </button>
         {summary.map(s => (
-          <button
-            key={s.day}
-            onClick={() => onSelectDay(selectedDay === s.day ? null : s.day)}
-            className="px-3 py-1.5 rounded-full text-xs font-bold transition-all shadow-sm hover:shadow-md"
-            style={{
-              backgroundColor: selectedDay === s.day ? getDayColor(s.day) : getDayColor(s.day) + '22',
-              color: selectedDay === s.day ? '#fff' : getDayColor(s.day),
-              border: `1.5px solid ${getDayColor(s.day)}`,
-            }}
-          >
-            Day {s.day} · {s.total_booths} booths · {s.estimated_distance_km}km
-          </button>
+          <div key={s.day} className="flex items-center gap-1 group">
+            <button
+              onClick={() => onSelectDay(selectedDay === s.day ? null : s.day)}
+              className="px-3 py-1.5 rounded-l-full text-xs font-bold transition-all shadow-sm hover:shadow-md h-9"
+              style={{
+                backgroundColor: selectedDay === s.day ? getDayColor(s.day) : getDayColor(s.day) + '22',
+                color: selectedDay === s.day ? '#fff' : getDayColor(s.day),
+                border: `1.5px solid ${getDayColor(s.day)}`,
+                borderRight: 'none'
+              }}
+            >
+              Day {s.day} · {s.total_booths} booths
+            </button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onDownloadDay?.(s.day);
+              }}
+              className="px-2 py-1.5 rounded-r-full text-xs font-bold transition-all shadow-sm hover:shadow-md flex items-center justify-center h-9 border-l-0"
+              style={{
+                backgroundColor: getDayColor(s.day) + '11',
+                color: getDayColor(s.day),
+                border: `1.5px solid ${getDayColor(s.day)}`,
+              }}
+              title={`Download Day ${s.day} Tour Plan`}
+            >
+              <Download className="w-3.5 h-3.5" />
+            </button>
+          </div>
         ))}
       </div>
     </div>
